@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Organizer</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"/>
+</head>
+<body>
+    <main class="container">
+        <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+            {% if user.is_authenticated %}
+            <ul>
+                <li><a href="{% url 'quoteapp:quote' %}" role="button">Add note</a></li>
+                <li><a href="{% url 'quoteapp:tag' %}" role="button">Add Tag</a></li>
+                <li><a href="{% url 'quoteapp:author' %}" role="button">Add author</a></li>
+                <li><a href="{% url 'quoteapp:quote_list' %}" role="button">Quote list</a></li>
+            </ul>
+            <ul>
+                <li>Welcome <b>{{ user.username }}!</b></li>
+                <li><a href="{% url 'users:profile' %}" role="button">Profile</a></li>
+                <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+            </ul>
+            {% else %}
+            <ul>
+                <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+                <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+                <li><a href="{% url 'quoteapp:quote_list' %}" role="button">Quote list</a></li>
+            </ul>
+            {% endif %}
+        </nav>
+
+        {% if user.is_authenticated %}
+        {% for quote in quotes %}
+        <ul>
+            <li>
+                <a href="{% url 'quoteapp:quote_detail' quote.id %}" role="button" class="outline"> {{ quote.quote }} </a> 
+                <a href="{% url 'quoteapp:delete' quote.id %}" role="button" class="contrast">Delete note</a>  
+            </li>
+        </ul>
+        {% endfor %}
+        {% else %}
+        {% for quote in quotes %}
+        <ul>
+            <li>
+                <a href="{% url 'quoteapp:quote_detail' quote.id %}" role="button" class="outline"> {{ quote.quote }} </a>
+                {% if quote.author %}
+                <a href="{% url 'quoteapp:author_detail' quote.author.id %}" role="button" class="outline"> {{ quote.author }} </a>
+                {% else %}
+                No author
+                {% endif %}
+            </li>
+        </ul>
+        {% endfor %}
+        {% endif %}
+            
+        
+    </main>
+    </body>
+</html>

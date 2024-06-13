@@ -1,0 +1,10 @@
+{% extends "quoteapp/base.html" %} {% load extract_tags %} {% block content %}
+
+
+<h1>Quotes</h1>
+<ul>
+    {% for quote in quotes %}
+        <li>{{ quote.quote }} - {{ quote.author.fullname }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
